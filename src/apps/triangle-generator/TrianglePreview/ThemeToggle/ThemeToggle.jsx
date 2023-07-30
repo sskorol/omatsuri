@@ -12,7 +12,7 @@ export default function ThemeToggle({ className, theme, onToggle, label = 'mode'
       className={cx(classes.control, classes[theme], className)}
     >
       <ThemeControl theme={theme === 'light' ? 'dark' : 'light'} size={18} />
-      <div className={classes.label}>
+      <div title="theme" className={classes.label}>
         {theme === 'light' ? 'Dark' : 'Light'} {label}
       </div>
     </button>

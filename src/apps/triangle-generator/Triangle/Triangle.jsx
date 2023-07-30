@@ -6,6 +6,7 @@ import getTriangleStyles from '../get-triangle-styles';
 export default function Triangle({ width, height, color, direction }) {
   return (
     <div
+      className={`direction-${direction}`}
       style={{
         ...getTriangleStyles({ width, height, color, direction }),
         transition: 'border 250ms ease',

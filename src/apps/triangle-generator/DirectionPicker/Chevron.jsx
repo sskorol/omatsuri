@@ -15,6 +15,7 @@ const angles = {
 export default function Chevron({ direction }) {
   return (
     <div
+      className={`direction-${direction}`}
       style={{
         width: 26,
         height: 26,

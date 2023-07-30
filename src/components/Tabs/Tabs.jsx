@@ -9,6 +9,7 @@ export default function Tabs({ className, data, active, onTabChange }) {
 
   const tabs = data.map((tab) => (
     <button
+      title={tab.label}
       type="button"
       key={tab.value}
       onClick={() => onTabChange(tab.value)}

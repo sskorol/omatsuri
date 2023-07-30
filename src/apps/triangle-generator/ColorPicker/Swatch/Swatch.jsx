@@ -6,6 +6,7 @@ import classes from './Swatch.styles.less';
 export default function Swatch({ className, value, ...others }) {
   return (
     <button
+      title={value}
       type="button"
       className={cx(classes.swatch, className)}
       style={{ backgroundColor: value }}

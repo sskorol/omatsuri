@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+// const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -51,6 +51,7 @@ module.exports = {
   },
 
   devServer: {
+    host: '0.0.0.0',
     port,
     compress: true,
     contentBase: output,
@@ -58,6 +59,7 @@ module.exports = {
     stats: { colors: true },
     hot: true,
     historyApiFallback: true,
+    disableHostCheck: true,
   },
 
   devtool: mode === 'production' ? false : 'eval',
@@ -66,7 +68,7 @@ module.exports = {
     mode === 'production'
       ? entry
       : [
-        `webpack-dev-server/client?http://localhost:${port}`,
+        `webpack-dev-server/client?http://0.0.0.0:${port}`,
         'webpack/hot/only-dev-server',
         entry,
       ],
@@ -123,14 +125,14 @@ module.exports = {
                 localIdentName:
                   mode === 'production'
                     ? '[hash:base64:10]'
-                    : '[path][name]__[local]--[hash:base64:5]',
+                    : '[name]__[local]--[hash:base64:5]',
               },
             },
           },
           {
             loader: 'less-loader',
             options: {
-              additionalData: "@import 'open-color/open-color.less';",
+              additionalData: '@import \'open-color/open-color.less\';',
             },
           },
           ...(mode === 'production' ? ['postcss-loader'] : []),
@@ -179,17 +181,24 @@ module.exports = {
       },
     }),
     new HtmlWebpackPlugin({ templateContent }),
-    new HtmlWebpackPlugin({ filename: '404.html', templateContent }),
+    new HtmlWebpackPlugin({
+      filename: '404.html',
+      templateContent,
+    }),
     ...(mode !== 'production'
       ? [
         new webpack.HotModuleReplacementPlugin(),
-        new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
+        // new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
       ]
       : [
         new BundleAnalyzerPlugin({ analyzerMode: analyze ? 'static' : 'disabled' }),
         new MiniCssExtractPlugin(),
         new CnameWebpackPlugin({ domain: 'omatsuri.app' }),
-        new OfflinePlugin({ autoUpdate: true, appShell: '/', excludes: ['404.html', 'CNAME'] }),
+        new OfflinePlugin({
+          autoUpdate: true,
+          appShell: '/',
+          excludes: ['404.html', 'CNAME'],
+        }),
       ]),
   ],
 };
